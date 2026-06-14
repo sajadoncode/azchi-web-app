@@ -1,0 +1,396 @@
+.app-shell {
+  width: min(100%, 680px);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: 34px clamp(28px, 7vw, 58px) 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 5;
+}
+
+button {
+  font: inherit;
+}
+
+.menu-button,
+.icon-button {
+  width: 38px;
+  height: 38px;
+  padding: 5px;
+  border: 0;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+}
+
+.menu-button svg,
+.icon-button svg {
+  width: 100%;
+  height: 100%;
+}
+
+.settings-panel {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: min(290px, calc(100vw - 56px));
+  padding: 18px 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.settings-panel strong,
+.settings-panel span {
+  display: block;
+}
+
+.settings-panel strong {
+  color: var(--ink);
+  font-size: .86rem;
+}
+
+.settings-panel div > span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: .7rem;
+}
+
+.theme-toggle {
+  width: 42px;
+  height: 24px;
+  padding: 3px;
+  border: 0;
+  border-radius: 99px;
+  background: var(--line);
+  cursor: pointer;
+}
+
+.toggle-dot {
+  width: 18px;
+  height: 18px;
+  display: block;
+  border-radius: 50%;
+  background: white;
+  transition: transform .2s ease;
+}
+
+.toggle-dot.active {
+  transform: translateX(18px);
+  background: var(--accent);
+}
+
+.location-button {
+  grid-column: 1 / -1;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  font-size: .76rem;
+  font-weight: 600;
+}
+
+.location-button svg {
+  width: 17px;
+}
+
+.location-consent {
+  min-height: calc(100svh - 145px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 70px;
+  text-align: center;
+}
+
+.consent-illustration {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+
+.consent-illustration svg {
+  width: 100%;
+  height: 100%;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--muted);
+  font-size: .74rem;
+  font-weight: 500;
+}
+
+.location-consent h1 {
+  max-width: 390px;
+  margin: 10px 0 14px;
+  color: var(--ink);
+  font-size: clamp(2rem, 9vw, 2.7rem);
+  line-height: 1.08;
+  letter-spacing: -.045em;
+}
+
+.consent-copy {
+  max-width: 410px;
+  margin: 0;
+  color: var(--muted);
+  font-size: .86rem;
+  line-height: 1.65;
+}
+
+.consent-button {
+  min-width: 210px;
+  margin-top: 28px;
+  padding: 13px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+  color: var(--bg);
+  background: var(--ink);
+  cursor: pointer;
+  font-size: .82rem;
+  font-weight: 650;
+}
+
+.consent-button:disabled {
+  cursor: wait;
+  opacity: .6;
+}
+
+.consent-button svg {
+  width: 19px;
+}
+
+.consent-error {
+  max-width: 390px;
+  margin: 16px 0 0;
+  color: #a74338;
+  font-size: .7rem;
+}
+
+.privacy-note {
+  margin: 17px 0 0;
+  color: var(--muted);
+  font-size: .63rem;
+}
+
+.location-block {
+  margin-top: 52px;
+  text-align: center;
+}
+
+.location-block h1 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: clamp(2rem, 8vw, 2.65rem);
+  font-weight: 720;
+  letter-spacing: -.045em;
+  line-height: 1.08;
+}
+
+.location-block p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .92rem;
+  line-height: 1.55;
+}
+
+.next-prayer {
+  margin: 42px auto 48px;
+  text-align: center;
+}
+
+.moon-orbit {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  margin: 0 auto 8px;
+}
+
+.moon {
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  left: 3px;
+  top: 5px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.moon::after {
+  content: '';
+  width: 29px;
+  height: 29px;
+  position: absolute;
+  left: 11px;
+  top: -4px;
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+.next-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: .93rem;
+}
+
+.next-prayer h2 {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-size: 1.45rem;
+  font-weight: 660;
+  letter-spacing: -.02em;
+}
+
+.next-prayer time {
+  display: block;
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-size: clamp(3.7rem, 16vw, 5.2rem);
+  font-weight: 690;
+  letter-spacing: -.065em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: .92rem;
+}
+
+.prayers-section {
+  width: 100%;
+}
+
+.section-heading {
+  padding: 0 0 17px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.section-heading h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.65rem;
+  font-weight: 720;
+  letter-spacing: -.035em;
+}
+
+.section-heading > span {
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.prayer-row {
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  color: var(--muted);
+}
+
+.prayer-icon {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+}
+
+.prayer-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.prayer-row.is-next {
+  color: #2e963f;
+}
+
+.prayer-name {
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 520;
+}
+
+.prayer-name small {
+  display: none;
+}
+
+.prayer-row time {
+  color: var(--ink);
+  font-size: 1.04rem;
+  font-weight: 540;
+  font-variant-numeric: tabular-nums;
+}
+
+.prayer-row.is-next time {
+  color: var(--ink);
+}
+
+footer {
+  margin-top: auto;
+  padding: 70px 0 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: .72rem;
+}
+
+footer p {
+  margin: 0;
+}
+
+footer > span {
+  display: none;
+}
+
+.status-message {
+  margin: 0 auto 12px;
+  padding: 6px 8px;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  font-size: .68rem;
+}
+
+@media (max-width: 430px) {
+  .app-shell {
+    padding: 27px 25px 25px;
+  }
+
+  .location-block {
+    margin-top: 42px;
+  }
+
+  .next-prayer {
+    margin: 36px auto 40px;
+  }
+
+  .prayer-row {
+    min-height: 59px;
+  }
+}

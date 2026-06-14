@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+
+:root {
+  font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #142019;
+  background: #f7f7f9;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --bg: #f7f7f9;
+  --ink: #18181a;
+  --muted: #9a9a9f;
+  --line: #dedee2;
+  --accent: #278d39;
+}
+
+:root[data-theme='dark'] {
+  color: #eef4ef;
+  background: #111713;
+  --bg: #17201a;
+  --ink: #f0f5f1;
+  --muted: #9aa79e;
+  --line: #334138;
+  --accent: #74c793;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: white;
+  background: var(--accent);
+}
