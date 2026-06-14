@@ -217,6 +217,11 @@ button {
   line-height: 1.55;
 }
 
+.muharram-mourning {
+  color: #c62828 !important;
+  font-weight: 600;
+}
+
 .next-prayer {
   margin: 20px auto 24px;
   text-align: center;

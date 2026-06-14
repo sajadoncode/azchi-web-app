@@ -7,6 +7,8 @@ type PrayerData = {
   timings: Record<PrayerName, string>
   gregorian: string
   hijri: string
+  hijriDay: number
+  hijriMonthNumber: number
   timezone: string
   method: string
   fetchedAt: string
@@ -19,7 +21,7 @@ type AladhanResponse = {
     date: {
       readable: string
       gregorian: { weekday: { en: string }; day: string; month: { en: string }; year: string }
-      hijri: { day: string; month: { en: string }; year: string }
+      hijri: { day: string; month: { number: number; en: string }; year: string }
     }
     meta: { timezone: string; method: { name: string } }
   }
@@ -135,6 +137,8 @@ function App() {
         ) as Record<PrayerName, string>,
         gregorian: `${responseDate.gregorian.weekday.en.slice(0, 3)}, ${responseDate.gregorian.month.en} ${Number(responseDate.gregorian.day)}, ${responseDate.gregorian.year}`,
         hijri: `${Number(responseDate.hijri.day)} ${responseDate.hijri.month.en} ${responseDate.hijri.year}`,
+        hijriDay: Number(responseDate.hijri.day),
+        hijriMonthNumber: responseDate.hijri.month.number,
         timezone: meta.timezone,
         method: meta.method.name,
         fetchedAt: new Date().toISOString(),
@@ -258,7 +262,7 @@ function App() {
           <section className="location-block">
             <h1>{formatCity(data.timezone)}</h1>
             <p>{data.gregorian}</p>
-            <p>{data.hijri}</p>
+            <p className={data.hijriMonthNumber === 1 && data.hijriDay >= 1 && data.hijriDay <= 10 ? 'hijri-date muharram-mourning' : 'hijri-date'}>{data.hijri}</p>
           </section>
 
           {nextPrayer && (
