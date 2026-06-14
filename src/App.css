@@ -1,8 +1,8 @@
 .app-shell {
   width: min(100%, 680px);
-  min-height: 100svh;
+  height: 100svh;
   margin: 0 auto;
-  padding: 34px clamp(28px, 7vw, 58px) 28px;
+  padding: 16px clamp(20px, 5vw, 40px) 12px;
   display: flex;
   flex-direction: column;
 }
@@ -197,7 +197,7 @@ button {
 }
 
 .location-block {
-  margin-top: 52px;
+  margin-top: 24px;
   text-align: center;
 }
 
@@ -218,7 +218,7 @@ button {
 }
 
 .next-prayer {
-  margin: 42px auto 48px;
+  margin: 20px auto 24px;
   text-align: center;
 }
 
@@ -286,7 +286,7 @@ button {
 }
 
 .section-heading {
-  padding: 0 0 17px;
+  padding: 0 0 10px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -306,7 +306,7 @@ button {
 }
 
 .prayer-row {
-  min-height: 62px;
+  min-height: 48px;
   display: grid;
   grid-template-columns: 34px 1fr auto;
   align-items: center;
@@ -353,7 +353,7 @@ button {
 
 footer {
   margin-top: auto;
-  padding: 70px 0 0;
+  padding: 16px 0 0;
   text-align: center;
   color: var(--muted);
   font-size: .72rem;
@@ -379,18 +379,18 @@ footer > span {
 
 @media (max-width: 430px) {
   .app-shell {
-    padding: 27px 25px 25px;
+    padding: 12px 18px 10px;
   }
 
   .location-block {
-    margin-top: 42px;
+    margin-top: 18px;
   }
 
   .next-prayer {
-    margin: 36px auto 40px;
+    margin: 16px auto 20px;
   }
 
   .prayer-row {
-    min-height: 59px;
+    min-height: 44px;
   }
 }

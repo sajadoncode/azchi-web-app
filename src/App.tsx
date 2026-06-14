@@ -27,6 +27,7 @@ type AladhanResponse = {
 
 const prayerNames: PrayerName[] = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']
 const CACHE_KEY = 'azchi-prayer-times-v1'
+const LOCATION_KEY = 'azchi-location-v1'
 
 function cleanTime(time: string) {
   return time.match(/\d{1,2}:\d{2}/)?.[0]?.padStart(5, '0') ?? time
@@ -100,6 +101,53 @@ function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [dark, setDark] = useState(() => localStorage.getItem('azchi-theme') === 'dark')
 
+  const fetchWithCoords = useCallback(async (latitude: number, longitude: number, force = false) => {
+    const today = localDateKey()
+    const cached = localStorage.getItem(CACHE_KEY)
+    if (!force && cached) {
+      try {
+        const parsed = JSON.parse(cached) as PrayerData & { dateKey: string }
+        if (parsed.dateKey === today) {
+          setData(parsed)
+          setLoading(false)
+          return
+        }
+      } catch {
+        localStorage.removeItem(CACHE_KEY)
+      }
+    }
+
+    try {
+      const date = new Intl.DateTimeFormat('en-GB').format(new Date()).replaceAll('/', '-')
+      const url = new URL(`https://api.aladhan.com/v1/timings/${date}`)
+      url.searchParams.set('latitude', latitude.toString())
+      url.searchParams.set('longitude', longitude.toString())
+      url.searchParams.set('method', '3')
+      const response = await fetch(url)
+      if (!response.ok) throw new Error('Prayer times request failed')
+      const json = (await response.json()) as AladhanResponse
+      if (json.code !== 200) throw new Error('Prayer times response was invalid')
+
+      const { date: responseDate, meta, timings } = json.data
+      const nextData: PrayerData = {
+        timings: Object.fromEntries(
+          prayerNames.map((name) => [name, cleanTime(timings[name])]),
+        ) as Record<PrayerName, string>,
+        gregorian: `${responseDate.gregorian.weekday.en.slice(0, 3)}, ${responseDate.gregorian.month.en} ${Number(responseDate.gregorian.day)}, ${responseDate.gregorian.year}`,
+        hijri: `${Number(responseDate.hijri.day)} ${responseDate.hijri.month.en} ${responseDate.hijri.year}`,
+        timezone: meta.timezone,
+        method: meta.method.name,
+        fetchedAt: new Date().toISOString(),
+      }
+      setData(nextData)
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ ...nextData, dateKey: today }))
+    } catch {
+      setMessage('Could not load prayer times. Check your connection and try again.')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   const loadPrayerTimes = useCallback((force = false) => {
     setLoading(true)
     setMessage('')
@@ -111,51 +159,9 @@ function App() {
     }
 
     navigator.geolocation.getCurrentPosition(
-      async ({ coords }) => {
-        const today = localDateKey()
-        const cached = localStorage.getItem(CACHE_KEY)
-        if (!force && cached) {
-          try {
-            const parsed = JSON.parse(cached) as PrayerData & { dateKey: string }
-            if (parsed.dateKey === today) {
-              setData(parsed)
-              setLoading(false)
-              return
-            }
-          } catch {
-            localStorage.removeItem(CACHE_KEY)
-          }
-        }
-
-        try {
-          const date = new Intl.DateTimeFormat('en-GB').format(new Date()).replaceAll('/', '-')
-          const url = new URL(`https://api.aladhan.com/v1/timings/${date}`)
-          url.searchParams.set('latitude', coords.latitude.toString())
-          url.searchParams.set('longitude', coords.longitude.toString())
-          url.searchParams.set('method', '3')
-          const response = await fetch(url)
-          if (!response.ok) throw new Error('Prayer times request failed')
-          const json = (await response.json()) as AladhanResponse
-          if (json.code !== 200) throw new Error('Prayer times response was invalid')
-
-          const { date: responseDate, meta, timings } = json.data
-          const nextData: PrayerData = {
-            timings: Object.fromEntries(
-              prayerNames.map((name) => [name, cleanTime(timings[name])]),
-            ) as Record<PrayerName, string>,
-            gregorian: `${responseDate.gregorian.weekday.en.slice(0, 3)}, ${responseDate.gregorian.month.en} ${Number(responseDate.gregorian.day)}, ${responseDate.gregorian.year}`,
-            hijri: `${Number(responseDate.hijri.day)} ${responseDate.hijri.month.en} ${responseDate.hijri.year}`,
-            timezone: meta.timezone,
-            method: meta.method.name,
-            fetchedAt: new Date().toISOString(),
-          }
-          setData(nextData)
-          localStorage.setItem(CACHE_KEY, JSON.stringify({ ...nextData, dateKey: today }))
-        } catch {
-          setMessage('Could not load prayer times. Check your connection and try again.')
-        } finally {
-          setLoading(false)
-        }
+      ({ coords }) => {
+        localStorage.setItem(LOCATION_KEY, JSON.stringify({ latitude: coords.latitude, longitude: coords.longitude }))
+        fetchWithCoords(coords.latitude, coords.longitude, force)
       },
       () => {
         setMessage('Location access was not granted. Please allow it and try again.')
@@ -163,7 +169,20 @@ function App() {
       },
       { enableHighAccuracy: false, timeout: 12_000, maximumAge: 3_600_000 },
     )
-  }, [])
+  }, [fetchWithCoords])
+
+  useEffect(() => {
+    const saved = localStorage.getItem(LOCATION_KEY)
+    if (saved) {
+      try {
+        const { latitude, longitude } = JSON.parse(saved)
+        setLoading(true)
+        fetchWithCoords(latitude, longitude)
+      } catch {
+        localStorage.removeItem(LOCATION_KEY)
+      }
+    }
+  }, [fetchWithCoords])
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 30_000)
